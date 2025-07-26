@@ -2,21 +2,29 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <title>Puter AI Chat</title>
   <script src="https://js.puter.com/v2/"></script>
   <script>
     window.onload = () => {
+      console.log("✅ AI script loaded");
       AIReady.postMessage("ready");
     };
 
-    window.chatWithAI = async function(message) {
-      console.log("Received:", message);
-      const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
-      console.log("Response:", res);
-      return res.text || res;
+    // 👇 Define the callable function Flutter will use
+    window.chatWithAI = async function (message) {
+      console.log("📨 Message received:", message);
+      try {
+        const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
+        console.log("✅ AI response:", res);
+        return res.text || res;
+      } catch (e) {
+        console.error("❌ AI error:", e);
+        return "❌ AI Error: " + e.message;
+      }
     };
   </script>
 </head>
 <body>
-  <p>AI Chatbot Loaded</p>
+  <p>✅ AI Chatbot Loaded..</p>
 </body>
 </html>
