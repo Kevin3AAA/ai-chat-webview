@@ -6,24 +6,28 @@
   <script src="https://js.puter.com/v2/"></script>
   <script>
     window.onload = () => {
-      console.log("✅ AI script loaded");
-      AIReady.postMessage("ready");
+      console.log("✅ Puter loaded");
+
+      // Safely notify Flutter
+      if (window.AIReady && window.AIReady.postMessage) {
+        AIReady.postMessage("ready");
+      }
     };
 
-window.chatWithAI = async function (message) {
-  console.log("📨 Message received:", message);
-  try {
-    const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
-    console.log("✅ AI response:", res);
-    return JSON.stringify(res.text || res);
-  } catch (e) {
-    console.error("❌ AI error:", e);
-    return JSON.stringify("❌ AI Error: " + e.message);
-  }
-};
+    window.chatWithAI = async function (message) {
+      console.log("📨 Message received:", message);
+      try {
+        const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
+        console.log("✅ AI response:", res);
+        return JSON.stringify(res.text || res);
+      } catch (e) {
+        console.error("❌ AI error:", e);
+        return JSON.stringify("❌ AI Error: " + e.message);
+      }
+    };
   </script>
 </head>
 <body>
-  <p>✅ AI Chatbot Loaded..</p>
+  <p>✅ AI Chatbot Loaded</p>
 </body>
 </html>
