@@ -8,12 +8,18 @@
         AIReady.postMessage("ready");
       };
 
-      // Expose this to Flutter
       window.chatWithAI = async function(message) {
         try {
           const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
-          if (res.choices && res.choices.length > 0) {
+
+          // Debug output
+          console.log("💬 Raw AI response:", res);
+
+          // Return based on what exists
+          if (res?.choices?.[0]?.message?.content) {
             return res.choices[0].message.content;
+          } else if (res?.text) {
+            return res.text;
           } else {
             return JSON.stringify(res);
           }
@@ -24,6 +30,6 @@
     </script>
   </head>
   <body>
-    <p style="font-family:sans-serif">AI Chatbot Loaded</p>
+    <p style="font-family:sans-serif">AI Chatbot Loaded Successfully</p>
   </body>
 </html>
