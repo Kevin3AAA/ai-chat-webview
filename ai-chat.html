@@ -10,18 +10,17 @@
       AIReady.postMessage("ready");
     };
 
-    // 👇 Define the callable function Flutter will use
-    window.chatWithAI = async function (message) {
-      console.log("📨 Message received:", message);
-      try {
-        const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
-        console.log("✅ AI response:", res);
-        return res.text || res;
-      } catch (e) {
-        console.error("❌ AI error:", e);
-        return "❌ AI Error: " + e.message;
-      }
-    };
+window.chatWithAI = async function (message) {
+  console.log("📨 Message received:", message);
+  try {
+    const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
+    console.log("✅ AI response:", res);
+    return JSON.stringify(res.text || res);
+  } catch (e) {
+    console.error("❌ AI error:", e);
+    return JSON.stringify("❌ AI Error: " + e.message);
+  }
+};
   </script>
 </head>
 <body>
