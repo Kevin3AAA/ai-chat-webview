@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <script src="https://js.puter.com/v2/"></script>
-    <script>
-      window.onload = () => {
-        if (window.AIReady) {
-          window.AIReady.postMessage("ready");
-        } else {
-          console.warn("AIReady channel not found");
-        }
-      };
+<head>
+  <meta charset="UTF-8" />
+  <title>Mixtral AI Chat</title>
+  <script>
+    const API_KEY = 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'; // 🔒 Replace this at build-time or inject via Flutter
 
-      window.chatWithAI = async function(message) {
-        const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
-        return res.text || res;
-      };
-    </script>
-  </head>
-  <body>
-    <p>AI Chatbot Loaded</p>
-  </body>
+    async function chatWithAI(message) {
+      try {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "mistralai/mixtral-8x7b",
+            messages: [
+              { role: "system", content: "You are a helpful medical assistant. Answer clearly but remind users to consult a real doctor." },
+              { role: "user", content: message }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        if (data.choices && data.choices[0]?.message?.content) {
+          return data.choices[0].message.content;
+        } else {
+          return "❌ No response from AI.";
+        }
+      } catch (err) {
+        return `❌ Network error: ${err.message}`;
+      }
+    }
+
+    // Flutter bridge
+    window.chatWithAI = chatWithAI;
+
+    window.onload = () => {
+      if (window.AIReady?.postMessage) {
+        AIReady.postMessage("ready");
+      } else {
+        console.warn("AIReady not found");
+      }
+    };
+  </script>
+</head>
+<body>
+  <p style="font-family:sans-serif">Mixtral AI Chatbot Loaded</p>
+</body>
 </html>
