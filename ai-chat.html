@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Puter AI Chat</title>
-  <script src="https://js.puter.com/v2/"></script>
-  <script>
-    window.onload = () => {
-      console.log("✅ Puter loaded");
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://js.puter.com/v2/"></script>
+    <script>
+      window.onload = () => {
+        if (window.AIReady) {
+          window.AIReady.postMessage("ready");
+        } else {
+          console.warn("AIReady channel not found");
+        }
+      };
 
-      // Safely notify Flutter
-      if (window.AIReady && window.AIReady.postMessage) {
-        AIReady.postMessage("ready");
-      }
-    };
-
-    window.chatWithAI = async function (message) {
-      console.log("📨 Message received:", message);
-      try {
+      window.chatWithAI = async function(message) {
         const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
-        console.log("✅ AI response:", res);
-        return JSON.stringify(res.text || res);
-      } catch (e) {
-        console.error("❌ AI error:", e);
-        return JSON.stringify("❌ AI Error: " + e.message);
-      }
-    };
-  </script>
-</head>
-<body>
-  <p>✅ AI Chatbot Loaded</p>
-</body>
+        return res.text || res;
+      };
+    </script>
+  </head>
+  <body>
+    <p>AI Chatbot Loaded</p>
+  </body>
 </html>
