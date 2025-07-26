@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://js.puter.com/v2/"></script>
+    <script>
+      // Notify Flutter when ready
+      window.onload = () => {
+        AIReady.postMessage("ready");
+      };
+
+      // Define callable function from Dart
+      window.chatWithAI = async function (message) {
+        try {
+          const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
+          return res.choices?.[0]?.message?.content || JSON.stringify(res);
+        } catch (e) {
+          return "❌ AI Error: " + e.message;
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <p>AI Chatbot Loaded</p>
+  </body>
+</html>
