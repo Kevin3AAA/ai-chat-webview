@@ -4,7 +4,14 @@
   <meta charset="UTF-8" />
   <title>Mixtral AI Chat</title>
   <script>
-    const API_KEY = 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'; // 🔒 Replace this at build-time or inject via Flutter
+    let API_KEY = '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';
+
+window.setApiKey = function (key) {
+  API_KEY = key;
+  if (window.AIReady?.postMessage) {
+    AIReady.postMessage("ready");
+  }
+};
 
     async function chatWithAI(message) {
       try {
