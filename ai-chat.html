@@ -6,12 +6,14 @@
   <script>
     let API_KEY = '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';
 
-window.setApiKey = function (key) {
-  API_KEY = key;
-  if (window.AIReady?.postMessage) {
-    AIReady.postMessage("ready");
-  }
-};
+    window.setApiKey = function (key) {
+      API_KEY = key;
+      if (window.AIReady?.postMessage) {
+        AIReady.postMessage("ready");
+      } else {
+        console.warn("❌ AIReady channel not available yet.");
+      }
+    };
 
     async function chatWithAI(message) {
       try {
@@ -24,36 +26,26 @@ window.setApiKey = function (key) {
           body: JSON.stringify({
             model: "mistralai/mixtral-8x7b",
             messages: [
-              { role: "system", content: "You are a helpful medical assistant. Answer clearly but remind users to consult a real doctor." },
+              {
+                role: "system",
+                content: "You are a helpful medical assistant. Answer clearly but remind users to consult a real doctor."
+              },
               { role: "user", content: message }
             ]
           })
         });
 
         const data = await response.json();
-        if (data.choices && data.choices[0]?.message?.content) {
-          return data.choices[0].message.content;
-        } else {
-          return "❌ No response from AI.";
-        }
+        return data.choices?.[0]?.message?.content ?? "❌ No response from AI.";
       } catch (err) {
         return `❌ Network error: ${err.message}`;
       }
     }
 
-    // Flutter bridge
     window.chatWithAI = chatWithAI;
-
-    window.onload = () => {
-      if (window.AIReady?.postMessage) {
-        AIReady.postMessage("ready");
-      } else {
-        console.warn("AIReady not found");
-      }
-    };
   </script>
 </head>
 <body>
-  <p style="font-family:sans-serif">Mixtral AI Chatbot Loaded</p>
+  <p style="font-family:sans-serif">✅ Mixtral AI Chatbot Loaded</p>
 </body>
 </html>
