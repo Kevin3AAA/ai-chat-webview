@@ -1,8 +1,22 @@
+<!DOCTYPE html>
 <html>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://js.puter.com/v2/"></script>
+  <script>
+    window.onload = () => {
+      AIReady.postMessage("ready");
+    };
+
+    window.chatWithAI = async function(message) {
+      console.log("Received:", message);
+      const res = await puter.ai.chat(message, { model: "gpt-4.1-nano" });
+      console.log("Response:", res);
+      return res.text || res;
+    };
+  </script>
+</head>
 <body>
-    <script src="https://js.puter.com/v2/"></script>
-    <script>
-        puter.ai.chat(`What is life?`).then(puter.print);
-    </script>
+  <p>AI Chatbot Loaded</p>
 </body>
 </html>
